@@ -13,7 +13,8 @@ public:
   ~Vector();
   Vector& operator = (const Vector& rhs);
   &operator [](unsigned i);
-  unsigned Size();
+  const &operator [](unsigned i) const;
+  const unsigned Size() const;
 };
 Vector operator + (const Vector& a, const Vector& b);
 
@@ -50,17 +51,21 @@ int& Vector::operator [](unsigned index) {
     return data[index];
 };
 
+const int& Vector::operator [](unsigned index) const{
+    return data[index];
+};
+
 Vector& Vector::operator = (const Vector& rhs) {
     this -> ~Vector();
     new(this) Vector(rhs);
     return *this;
 }
 
-unsigned Vector::Size() {
+const unsigned Vector::Size() const{
     return capacity;
 }
 
-Vector operator + (Vector& a, Vector& b){
+Vector operator + (const Vector& a, const Vector& b){
     int n = std::max(a.Size(), b.Size());
     int m = std::min(a.Size(), b.Size());
     Vector result(n);
