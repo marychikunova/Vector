@@ -29,29 +29,29 @@ Vector::~Vector()
   data = NULL;
 };
 
-/*int& Vector::cat(int index) { //не нужно
-  assert (0 <= index && index < capacity);
-  return data[index];
-};*/
-
 int& Vector::operator [](unsigned index) {
     assert (0 <= index);
+    bool flag = false;
     while(index >= capacity) {
         capacity *= 2;
+        flag = true;
+    }
+    if(!flag) {
+        return data[index];
     }
     int* mas = new int[capacity];
     for(int i = 0; i < capacity; ++i) {
         mas[i] = data[i];
     }
-    data = new int[capacity];
-    for(int i = 0; i < capacity; ++i) {
-        data[i] = mas[i];
-    }
-    delete[]mas;
+    delete [] data;
+    data = mas;
     return data[index];
 };
 
 const int& Vector::operator [](unsigned index) const{
+    if(index < 0 || index >= capacity) {
+        return 0;
+    }
     return data[index];
 };
 
@@ -87,10 +87,6 @@ Vector operator + (const Vector& a, const Vector& b){
 
 int main() {
     Vector V1(5);
-    V1[0] = 1;
-    std::cout << V1[0] << " ";
-    std::cout << "\n";
-
     for(int i = 0; i < 5; ++i)
         V1[i] = i + 1;
     for(int i = 0; i < 5; ++i)
