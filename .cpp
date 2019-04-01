@@ -3,33 +3,40 @@
 #include <cstddef>
 #include <assert.h>
 
+template <typename T>
 class Vector {
 private:
-  int* data;
+  T* data;
   unsigned capacity;
 
 public:
   Vector(int ap);
   ~Vector();
   Vector& operator = (const Vector& rhs);
-  &operator [](unsigned i);
-  const &operator [](unsigned i) const;
+  //&operator [](unsigned i);
+  T& operator [](unsigned index);
+  const T& operator [](unsigned index) const;
+  //const &operator [](unsigned i) const;
   const unsigned Size() const;
 };
-Vector operator + (const Vector& a, const Vector& b);
+template <typename T>
+Vector<T> operator + (const Vector<T>& a, const Vector<T>& b);
 
-Vector::Vector(int ap) {
+template <typename T>
+Vector<T>::Vector(int ap) {
   data = new int[ap];
   capacity = ap;
 };
 
-Vector::~Vector()
+template <typename T>
+Vector<T>::~Vector()
 {
   delete[]data;
   data = NULL;
 };
 
-int& Vector::operator [](unsigned index) {
+template <typename T>
+T& Vector<T>::operator [](unsigned index) {
     assert (0 <= index);
     bool flag = false;
     while(index >= capacity) {
@@ -48,27 +55,31 @@ int& Vector::operator [](unsigned index) {
     return data[index];
 };
 
-const int& Vector::operator [](unsigned index) const{
+template <typename T>
+const T& Vector<T>::operator [](unsigned index) const{
     if(index < 0 || index >= capacity) {
         return 0;
     }
     return data[index];
 };
 
-Vector& Vector::operator = (const Vector& rhs) {
+template <typename T>
+Vector<T>& Vector<T>::operator = (const Vector<T>& rhs) {
     this -> ~Vector();
     new(this) Vector(rhs);
     return *this;
 }
 
-const unsigned Vector::Size() const{
+template <typename T>
+const unsigned Vector<T>::Size() const{
     return capacity;
 }
 
-Vector operator + (const Vector& a, const Vector& b){
+template <typename T>
+Vector<T> operator + (const Vector<T>& a, const Vector<T>& b){
     int n = std::max(a.Size(), b.Size());
     int m = std::min(a.Size(), b.Size());
-    Vector result(n);
+    Vector<T> result(n);
     for(int i = 0; i <= m; ++i) {
         result[i] = a[i] + b[i];
     }
@@ -86,21 +97,21 @@ Vector operator + (const Vector& a, const Vector& b){
 }
 
 int main() {
-    Vector V1(5);
+    Vector<int> V1(5);
     for(int i = 0; i < 5; ++i)
         V1[i] = i + 1;
     for(int i = 0; i < 5; ++i)
         std::cout << V1[i] << " ";
     std::cout << "\n";
 
-    Vector V2(10);
+    Vector<int> V2(10);
     for(int i = 0; i < 10; ++i)
         V2[i] = i + 1;
     for(int i = 0; i < 10; ++i)
         std::cout << V2[i] << " ";
     std::cout << "\n";
 
-    Vector V = V1 + V2;
+    Vector<int> V = V1 + V2;
     for(int i = 0; i < 10; ++i)
         std::cout << V[i] << " ";
     return 0;
